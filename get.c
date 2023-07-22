@@ -10,7 +10,7 @@ char *_getline()
 {
 	char *ptr;
 	size_t buf;
-	
+
 	ptr = NULL;
 	buf = 0;
 	getline(&ptr, &buf, stdin);
