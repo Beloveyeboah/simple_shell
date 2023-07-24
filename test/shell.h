@@ -6,4 +6,4 @@
 
 int cause(char **argv, char **env);
 
-#ifndef
+#endif
