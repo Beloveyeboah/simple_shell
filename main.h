@@ -11,7 +11,6 @@
 #include <sys/wait.h>
 #include <stdarg.h>
 
-
 void execmd(char **argv);
 char *get_path(char *cmd);
 
@@ -24,11 +23,18 @@ int built_unsetenv(char **argv);
 int built_setenv(char **argv);
 void built_env();
 void alias(char **argv);
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 
 int _strlen(const char *str);
-char *_strcat(char *dest, const char *src);
-int _printf(const char *format, ...);
-char *_strtok(char *str, const char *delim);
-char *_strchr(const char *str, int c);
+char* _strcat(char *dest, const char *src);
+int _printf(const char *format, ...) ;
+char* _strtok(char *str, const char *delim);
+char* _strchr(const char *str, int c);
+
+size_t _strcspn(const char* str, const char* reject);
+char *_strdup(const char* str);
+char *_strstr(const char *haystack, const char *needle);
+int _strcmp(const char *str1, const char *str2);
+char *_strcpy(char *dest, const char *src);
 
 #endif

@@ -104,7 +104,7 @@ int built_setenv(char **argv)
 /**
  * built_unsetenv - prints the unsetenv values
  *
- * @qrgv: the commands
+ * @argv: the commands
  *
  * Return: 1
  */
@@ -138,11 +138,11 @@ void built_env(void)
 {
 	extern char **environ;
 	char **env;
+	int i;
 
 	env = environ;
-	while (env != NULL)
+	for (i = 0; env[i] != NULL; i++)
 	{
-		_printf("%s\n", *env++);
+		_printf("%s\n", env[i]);
 	}
-
 }

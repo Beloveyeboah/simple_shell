@@ -44,7 +44,7 @@ char *_strcat(char *dest, const char *src)
 char *_strtok(char *str, const char *delim)
 {
 	static char *p = NULL;
-	int len; 
+	int len;
 	char *ptr;
 
 	if (str != NULL)

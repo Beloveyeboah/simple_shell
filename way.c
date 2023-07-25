@@ -47,3 +47,19 @@ char *get_path(char *cmd)
 	}
 	return (NULL);
 }
+
+/**
+ * _strcpy - copies str
+ * @src: the source
+ * @dest: the destination
+ * Return: 1
+ */
+char *_strcpy(char *dest, const char *src)
+{
+	char *last = dest;
+
+	while ((*dest = *src))
+		;
+	return (last);
+}
+
