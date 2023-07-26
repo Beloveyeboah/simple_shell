@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 /**
  * built_cd - function for chaingin directory
  *
@@ -45,7 +46,7 @@ int built_cd(char **argv)
 
 /**
  * built_pwd - prints the curret working directory of the shell
- * Retun - void
+ * Return: void
  */
 int built_pwd(void)
 {
@@ -66,83 +67,63 @@ int built_pwd(void)
 /**
  * built_setenv - set the env
  *
- * @argv: the command
+ * @var: the valuable
+ *
+ * @value: the value
  *
  * Return: 1
  */
-int built_setenv(char **argv)
+int built_setenv(char *var, char *value)
 {
-	extern char **environ;
-	char **env;
-	char *msg = "Too many arguments\n";
+	int ow = 1;
+	char res;
 
-	if (argv[1] == NULL)
+	if (var == NULL || value == NULL)
 	{
-		env = environ;
-		while (*env != NULL)
-		{
-			_printf("%s", *env);
-			env++;
-		}
+		printf("Usage: setenv VAR VALUE\n");
+		return (0);
 	}
-	else if (argv[3] != NULL)
+	if (getenv(var) != NULL)
 	{
-		write(STDOUT_FILENO, msg, sizeof(msg));
-	}
-	else
-	{
-		if (setenv(argv[1], argv[2], 1) == -1)
+		printf("Variable %s already exists. Overwrite? (y/n): ", var);
+		scanf("%c", &res);
+		if (res == 'n' || res == 'N')
 		{
-			perror("Error: setenv");
-			return (-1);
+			return (0);
 		}
-
+		else
+		{
+			ow = 0;
+		}
+		if (setenv(var, value, ow) == 0)
+		{
+			printf("Variable %s has been set to %s\n", var, value);
+			return (1);
+		}
+		else
+		{
+			perror("setenv");
+		}
 	}
 	return (0);
 }
 
-/**
- * built_unsetenv - prints the unsetenv values
- *
- * @argv: the commands
- *
- * Return: 1
- */
-
-int built_unsetenv(char **argv)
-{
-	char *msg = "Error: unsetenv\n";
-
-	if (argv[1] == NULL)
-	{
-		write(STDOUT_FILENO, msg, sizeof(msg));
-	}
-	else
-	{
-		if (unsetenv(argv[1]) == -1)
-		{
-			perror("Error: unsetenv");
-			return (-1);
-		}
-
-	}
-	return (0);
-}
 
 /**
  * built_env - prints the env
  *
- * Return: o
+ * Return: nothing
  */
 void built_env(void)
 {
 	extern char **environ;
 	char **env;
-	int i;
+	int i = 0;
 
 	env = environ;
+
 	for (i = 0; env[i] != NULL; i++)
 	{
-		_printf("%s\n", env[i]);
+		printf("%s\n", env[i]);
 	}
 }

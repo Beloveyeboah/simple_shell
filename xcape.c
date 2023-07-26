@@ -9,9 +9,7 @@
  */
 void _exit(int status)
 {
-	char *msg = "Exiting the shell\n";
-
-	write(STDERR_FILENO, msg, strlen(msg));
+	_printf("Exiting the shell status: %d\n", status);
 	exit(status);
 }
 

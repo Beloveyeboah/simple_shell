@@ -20,19 +20,20 @@ void execmd(char **argv)
 		if (pid == -1)
 		{
 			_error("Fail: to fork process");
+			exit(EXIT_FAILURE);
 		}
-		if (pid == 0)
+		else if (pid == 0)
 		{
 			if (execve(cmdx, argv, NULL) == -1)
 			{
-				_error("Error: not a command");
+				perror("Error: not a comman");
 			}
 			exit(1);
 		}
 		else
 		{
 			waitpid(pid, &status, 0);
+			_printf("staus %d\n", status);
 		}
 	}
 }
-
