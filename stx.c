@@ -1,113 +1,154 @@
-#include "main.h"
+#include "shell.h"
 
 /**
- * _strlen - counts the length of a string
- * @str: the string
- * Return: 1
- */
-int _strlen(const char *str)
+* str_length - returns the length of a string.
+* @string: pointer to string.
+* Return: length of string.
+*/
+int str_length(char *string)
 {
-	int len = 0;
+int length = 0;
 
-	while (str[len] != '\0')
-	{
-		len++;
-	}
-	return (len);
+if (string == NULL)
+return (0);
+
+while (string[length++] != '\0')
+{
+}
+return (--length);
 }
 
 /**
- * _strcat - adds a string to the destination
- * @dest: the rceiver
- * @src: the source
- * Return: the destination
- */
-char *_strcat(char *dest, const char *src)
+* str_duplicate - duplicates an string
+* @string: String to be copied
+* Return: pointer to the array
+*/
+char *str_duplicate(char *string)
 {
-	char *ptr = dest + strlen(dest);
+char *result;
+int length, i;
 
-	while (*src != '\0')
-	{
-		*ptr++ = *src++;
-	}
-	*ptr = '\0';
-	return (dest);
+if (string == NULL)
+return (NULL);
+
+length = str_length(string) + 1;
+
+result = malloc(sizeof(char) * length);
+
+if (result == NULL)
+{
+errno = ENOMEM;
+perror("Error");
+return (NULL);
+}
+for (i = 0; i < length ; i++)
+{
+result[i] = string[i];
+}
+
+return (result);
+}
+
+/**
+* str_compare - Compare two strings
+* @string1: String one, or the shorter
+* @string2: String two, or the longer
+* @number: number of characters to be compared, 0 if infinite
+* Return: 1 if the strings are equals,0 if the strings are different
+*/
+int str_compare(char *string1, char *string2, int number)
+{
+int iterator;
+
+if (string1 == NULL && string2 == NULL)
+return (1);
+
+if (string1 == NULL || string2 == NULL)
+return (0);
+
+if (number == 0) /* infinite longitud */
+{
+if (str_length(string1) != str_length(string2))
+return (0);
+for (iterator = 0; string1[iterator]; iterator++)
+{
+if (string1[iterator] != string2[iterator])
+return (0);
+}
+return (1);
+}
+else /* if there is a number of chars to be compared */
+{
+for (iterator = 0; iterator < number ; iterator++)
+{
+if (string1[iterator] != string2[iterator])
+return (0);
+}
+return (1);
+}
+}
+
+/**
+* str_concat - concatenates two strings.
+* @string1: String to be concatenated
+* @string2: String to be concatenated
+*
+* Return: pointer to the array
+*/
+char *str_concat(char *string1, char *string2)
+{
+char *result;
+int length1 = 0, length2 = 0;
+
+if (string1 == NULL)
+string1 = "";
+length1 = str_length(string1);
+
+if (string2 == NULL)
+string2 = "";
+length2 = str_length(string2);
+
+result = malloc(sizeof(char) * (length1 + length2 + 1));
+if (result == NULL)
+{
+errno = ENOMEM;
+perror("Error");
+return (NULL);
+}
+
+/* copy of string1 */
+for (length1 = 0; string1[length1] != '\0'; length1++)
+result[length1] = string1[length1];
+free(string1);
+
+/* copy of string2 */
+for (length2 = 0; string2[length2] != '\0'; length2++)
+{
+result[length1] = string2[length2];
+length1++;
+}
+
+result[length1] = '\0';
+return (result);
 }
 
 
 /**
- * _strtok - romove tokens
- * @delim: the delimiter
- * @str: the string
- * Return: token
- */
-char *_strtok(char *str, const char *delim)
+* str_reverse - reverses a string.
+*
+* @string: pointer to string.
+* Return: void.
+*/
+void str_reverse(char *string)
 {
-	static char *p = NULL;
-	int len;
-	char *ptr;
 
-	if (str != NULL)
-	{
-		p = str;
-	}
-	if (p == NULL)
-	{
-		return (NULL);
-	}
-	len = 0;
-	while (p[len] != '\0' && strchr(delim, p[len]) == NULL)
-	{
-		len++;
-	}
-	if (p[len] == '\0')
-	{
-		ptr = p;
-		p = NULL;
-		return (ptr);
-	}
-	p[len] = '\0';
-	ptr = p;
-	p = p + len + 1;
-	return (ptr);
+int i = 0, length = str_length(string) - 1;
+char hold;
+
+while (i < length)
+{
+hold = string[i];
+string[i++] = string[length];
+string[length--] = hold;
 }
-
-/**
- * _printf - prints to screen
- * @format: the specifer
- * Return: 1
- */
-
-int _printf(const char *format, ...)
-{
-	va_list args;
-	int count;
-
-	va_start(args, format);
-	count = vfprintf(stdout, format, args);
-	va_end(args);
-	return (count);
-}
-
-/**
- * _strchr - searches for a string
- * @str: the string to be searched
- * @c: the counter
- * Return: 1
- */
-char *_strchr(const char *str, int c)
-{
-	while (*str != '\0')
-	{
-		if (*str == c)
-		{
-			return ((char *)str);
-		}
-		str++;
-	}
-	if (c == '\0')
-	{
-		return ((char *)str);
-	}
-	return (NULL);
 }

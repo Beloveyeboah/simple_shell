@@ -1,39 +1,45 @@
-#include "main.h"
-
+#include "shell.h"
 /**
- * execmd - executes the shell programm
- *
- * @argv: the commands to be executed
- *
- * Return: nothing
- */
-void execmd(char **argv)
+* execute - execute a commands from the user
+* @data: a pointer to the program's data
+* Return: -1.
+*/
+int execute(data_of_program *data)
 {
-	char *cmd = NULL, *cmdx = NULL;
-	pid_t pid = fork();
-	int status;
+int retval = 0, status;
+pid_t pidd;
 
-	if (argv)
-	{
-		cmd = argv[0];
-		cmdx = get_path(cmd);
-		if (pid == -1)
-		{
-			_error("Fail: to fork process");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)
-		{
-			if (execve(cmdx, argv, NULL) == -1)
-			{
-				perror("Error: not a comman");
-			}
-			exit(1);
-		}
-		else
-		{
-			waitpid(pid, &status, 0);
-			_printf("staus %d\n", status);
-		}
-	}
+retval = builtins_list(data);
+if (retval != -1)/* if program was found in built ins */
+return (retval);
+
+retval = find_program(data);
+if (retval)
+{/* if program not found */
+return (retval);
+}
+else
+{/* if program was found */
+pidd = fork(); /* create a child process */
+if (pidd == -1)
+{ /* if the fork call failed */
+perror(data->command_name);
+exit(EXIT_FAILURE);
+}
+if (pidd == 0)
+{/* I am the child process, I execute the program*/
+retval = execve(data->tokens[0], data->tokens, data->env);
+if (retval == -1) /* if error when execve*/
+perror(data->command_name), exit(EXIT_FAILURE);
+}
+else
+{/* I am the father, I wait and check the exit status of the child */
+wait(&status);
+if (WIFEXITED(status))
+errno = WEXITSTATUS(status);
+else if (WIFSIGNALED(status))
+errno = 128 + WTERMSIG(status);
+}
+}
+return (0);
 }
